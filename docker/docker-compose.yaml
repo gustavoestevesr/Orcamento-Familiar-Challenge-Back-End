@@ -1,0 +1,25 @@
+version: "3.1"
+services:
+  db:
+    image: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_PASSWORD: root
+    ports:
+    - "5432:5432"
+    volumes:
+    - orcamento_familiar:/var/lib/postgres
+
+volumes:
+  orcamento_familiar:
+
+# Start?
+# cd docker 
+# docker-compose up
+
+# Stop?
+# Ctrl + C
+# docker-compose down
+
+# Listar?
+# docker ps
