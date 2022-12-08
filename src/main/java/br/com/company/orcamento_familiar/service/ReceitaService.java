@@ -23,12 +23,10 @@ public class ReceitaService {
     private ModelMapper mapper = new ModelMapper();
     
     public ReceitaDto salvar(ReceitaDto receitaDto) {
-
         boolean receitaJaCadastradaNoMes = repository.isReceitaJaCadastrada(receitaDto.getDescricao(), receitaDto.getData().getYear(), receitaDto.getData().getMonthValue());
         if (receitaJaCadastradaNoMes) {
             throw new ValidationException("Receita já cadastrada no mês!");
         }
-
         Receita receita = mapper.map(receitaDto, Receita.class);
         receita = repository.save(receita);
         return mapper.map(receita, ReceitaDto.class);
@@ -36,7 +34,6 @@ public class ReceitaService {
 
     public Optional<ReceitaDto> obterPorId(@NotNull Long id) {
         Optional<Receita> receita = repository.findById(id);
-
         if (receita.isPresent()) {
             return Optional.of(mapper.map(receita.get(), ReceitaDto.class));
         }

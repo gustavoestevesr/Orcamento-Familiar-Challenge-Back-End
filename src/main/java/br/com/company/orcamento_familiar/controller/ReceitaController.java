@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.company.orcamento_familiar.dto.ReceitaDto;
@@ -28,21 +27,21 @@ public class ReceitaController {
 
     @Autowired
     private ReceitaService service;
-    
+
     @PostMapping()
-    public ResponseEntity<ReceitaDto> salvar(@RequestBody @Valid ReceitaDto receitaDto){
+    public ResponseEntity<ReceitaDto> salvar(@RequestBody @Valid ReceitaDto receitaDto) {
         ReceitaDto receita = service.salvar(receitaDto);
         return new ResponseEntity<>(receita, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<ReceitaDto>> listarTodos(){
+    public ResponseEntity<List<ReceitaDto>> listarTodos() {
         List<ReceitaDto> receitas = service.listarTodos();
         return new ResponseEntity<>(receitas, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReceitaDto> obterPorId(@PathVariable @NotNull Long id){
+    public ResponseEntity<ReceitaDto> obterPorId(@PathVariable @NotNull Long id) {
         Optional<ReceitaDto> receita = service.obterPorId(id);
         if (receita.isPresent()) {
             return new ResponseEntity(receita.get(), HttpStatus.FOUND);
@@ -51,7 +50,7 @@ public class ReceitaController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> exclusao(@PathVariable @NotNull Long id){
+    public ResponseEntity<Void> exclusao(@PathVariable @NotNull Long id) {
         Optional<ReceitaDto> receita = service.obterPorId(id);
         if (receita.isPresent()) {
             service.exclusao(id);
@@ -61,7 +60,8 @@ public class ReceitaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReceitaDto> atualizar(@PathVariable @NotNull Long id, @RequestBody @Valid ReceitaDto receitaDto){
+    public ResponseEntity<ReceitaDto> atualizar(@PathVariable @NotNull Long id,
+            @RequestBody @Valid ReceitaDto receitaDto) {
         Optional<ReceitaDto> receita = service.obterPorId(id);
         if (receita.isPresent()) {
             service.atualizar(id, receitaDto);
