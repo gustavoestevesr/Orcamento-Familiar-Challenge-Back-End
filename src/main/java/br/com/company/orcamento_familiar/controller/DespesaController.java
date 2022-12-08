@@ -3,7 +3,7 @@ package br.com.company.orcamento_familiar.controller;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +13,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import br.com.company.orcamento_familiar.dto.DespesasDto;
-import br.com.company.orcamento_familiar.dto.ReceitaDto;
 import br.com.company.orcamento_familiar.service.DespesasService;
 
 @RestController
@@ -56,6 +55,14 @@ public class DespesaController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    // @PutMapping
+    @PutMapping("/{id}")
+    public ResponseEntity<DespesasDto> atualizar(@PathVariable @NotNull Long id, @RequestBody @Valid DespesasDto despesasDto) {
+        Optional<DespesasDto> despesa = service.obterPorId(id);
+        if (despesa.isPresent()) {
+            service.atualizar(id, despesasDto);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
 }

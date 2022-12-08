@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.validation.ValidationException;
 import javax.validation.constraints.NotNull;
 
 import org.modelmapper.ModelMapper;
@@ -20,6 +21,16 @@ public class DespesasService {
     @Autowired
     private DespesaRepository repository;
     private ModelMapper mapper = new ModelMapper();
+
+    public DespesasDto salvar(DespesasDto despesasDto) {
+        boolean despesaJaCadastradaNoMes = repository.isDespesaJaCadastrada(despesasDto.getDescricao(), despesasDto.getData().getYear(), despesasDto.getData().getMonthValue());
+        if (despesaJaCadastradaNoMes) {
+            throw new ValidationException("Despesa já cadastrada no mês!");
+        }
+        Despesas despesa = mapper.map(despesasDto, Despesas.class);
+        despesa = repository.save(despesa);
+        return mapper.map(despesa, DespesasDto.class);
+    }
 
     public List<DespesasDto> listarTodos(){
         List<Despesas> despesas = repository.findAll();
@@ -38,6 +49,13 @@ public class DespesasService {
 
     public void exclusao(@NotNull Long id){
         repository.deleteById(id);
+    }
+
+    public DespesasDto atualizar(Long id, DespesasDto despesasDto ){
+        Despesas receita = mapper.map(despesasDto, Despesas.class);
+        receita.setId(id);
+        receita = repository.save(receita);
+        return mapper.map(receita, DespesasDto.class);
     }
 
 }
