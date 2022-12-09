@@ -28,7 +28,11 @@ public class DespesaController {
     @Autowired
     private DespesasService service;
     
-    @PostMapping
+    @PostMapping()
+    public ResponseEntity<DespesasDto> salvar(@RequestBody @Valid DespesasDto despesasDto) {
+        DespesasDto despesa = service.salvar(despesasDto);
+        return new ResponseEntity<>(despesa, HttpStatus.CREATED);
+    }
 
     @GetMapping
     public ResponseEntity<List<DespesasDto>> listarTodos(){

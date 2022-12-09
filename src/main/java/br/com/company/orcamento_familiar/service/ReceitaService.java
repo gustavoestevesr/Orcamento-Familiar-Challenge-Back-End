@@ -23,7 +23,7 @@ public class ReceitaService {
     private ModelMapper mapper = new ModelMapper();
     
     public ReceitaDto salvar(ReceitaDto receitaDto) {
-        boolean receitaJaCadastradaNoMes = repository.isReceitaJaCadastrada(receitaDto.getDescricao(), receitaDto.getData().getYear(), receitaDto.getData().getMonthValue());
+        boolean receitaJaCadastradaNoMes = repository.receitaJaCadastrada(receitaDto.getDescricao(), receitaDto.getData().getYear(), receitaDto.getData().getMonthValue());
         if (receitaJaCadastradaNoMes) {
             throw new ValidationException("Receita já cadastrada no mês!");
         }

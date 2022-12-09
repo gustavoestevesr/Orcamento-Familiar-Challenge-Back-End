@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.company.orcamento_familiar.dto.DespesasDto;
+import br.com.company.orcamento_familiar.model.Categoria;
 import br.com.company.orcamento_familiar.model.Despesas;
 import br.com.company.orcamento_familiar.repository.DespesaRepository;
 
@@ -23,10 +24,15 @@ public class DespesasService {
     private ModelMapper mapper = new ModelMapper();
 
     public DespesasDto salvar(DespesasDto despesasDto) {
-        boolean despesaJaCadastradaNoMes = repository.isDespesaJaCadastrada(despesasDto.getDescricao(), despesasDto.getData().getYear(), despesasDto.getData().getMonthValue());
-        if (despesaJaCadastradaNoMes) {
-            throw new ValidationException("Despesa já cadastrada no mês!");
+        // boolean despesaJaCadastradaNoMes = repository.despesaJaCadastrada(despesasDto.getDescricao(), despesasDto.getData().getYear(), despesasDto.getData().getMonthValue());
+        // if (despesaJaCadastradaNoMes) {
+        //     throw new ValidationException("Despesa já cadastrada no mês!");
+        // }
+
+        if (despesasDto.getCategoria() == null) {
+            despesasDto.setCategoria(Categoria.OUTRAS);
         }
+
         Despesas despesa = mapper.map(despesasDto, Despesas.class);
         despesa = repository.save(despesa);
         return mapper.map(despesa, DespesasDto.class);
@@ -35,7 +41,7 @@ public class DespesasService {
     public List<DespesasDto> listarTodos(){
         List<Despesas> despesas = repository.findAll();
         return despesas.stream()
-        .map(d -> mapper.map(despesas, DespesasDto.class))
+        .map(d -> mapper.map(d, DespesasDto.class))
         .collect(Collectors.toList());
     }
 
